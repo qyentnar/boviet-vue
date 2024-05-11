@@ -9,11 +9,11 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
-        <!-- <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
+        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+          <qyentnar-git id="qyentnar-git" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="文档地址" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip> -->
 
@@ -53,8 +53,8 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-import RuoYiGit from '@/components/RuoYi/Git'
-import RuoYiDoc from '@/components/RuoYi/Doc'
+import QyentnarGit from '@/components/Qyentnar/Git'
+import RuoYiDoc from '@/components/Qyentnar/Doc'
 import LanguageSelect from '@/components/LanguageSelect'
 
 export default {
@@ -65,7 +65,7 @@ export default {
     Screenfull,
     SizeSelect,
     Search,
-    RuoYiGit,
+    QyentnarGit,
     RuoYiDoc,
     LanguageSelect
   },
