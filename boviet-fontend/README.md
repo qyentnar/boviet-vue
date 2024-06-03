@@ -32,6 +32,7 @@ npm run build:prod
 
 ## Nginx配置
 
+```bash
 worker_processes  1;
 
 events {
