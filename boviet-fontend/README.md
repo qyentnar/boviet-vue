@@ -30,7 +30,7 @@ npm run build:prod
 ```
 
 
-#Nginx配置
+## Nginx配置
 
 worker_processes  1;
 
