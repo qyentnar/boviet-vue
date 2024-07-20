@@ -1,8 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-#set($lang="`$\{this.$i18n\.t('keyWork')}`")
-#set($lang=$lang.replace("\",""))
 #foreach($column in $columns)
 #if($column.query)
 #set($dictType=$column.dictType)
@@ -13,10 +11,8 @@
 #else
 #set($comment=$column.columnComment)
 #end
-#set($label=$lang.replace("keyWork","lbl.${businessName}.${column.javaField}"))
-#set($placeholder=$lang.replace("keyWork","plh.${businessName}.${column.javaField}"))
-#set($plhStartDate=$lang.replace("keyWork","plh.startDate"))
-#set($plhEndDate=$lang.replace("keyWork","plh.endDate"))
+#set($label="$t('lbl.${businessName}.${column.javaField}')")
+#set($placeholder="$t('plh.${businessName}.${column.javaField}')")
 #if($column.htmlType == "input")
       <el-form-item :label="$label" prop="${column.javaField}">
         <el-input
@@ -40,7 +36,7 @@
 #elseif(($column.htmlType == "select" || $column.htmlType == "radio") && $dictType)
       <el-form-item :label="$label" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" :placeholder="$placeholder" clearable>
-          <el-option label="请选择字典生成" value="" />
+          <el-option :label="$t('dictGeneration')" value="" />
         </el-select>
       </el-form-item>
 #elseif($column.htmlType == "datetime" && $column.queryType != "BETWEEN")
@@ -60,8 +56,8 @@
           value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="-"
-          :start-placeholder="$plhStartDate"
-          :end-placeholder="$plhEndDate"
+          :start-placeholder="$t('plh.startDate')"
+          :end-placeholder="$t('plh.endDate')"
         ></el-date-picker>
       </el-form-item>
 #end
@@ -70,8 +66,8 @@
       <el-row>
         <el-col align="center">
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{this.$i18n.t("btnSearch")}}</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{this.$i18n.t("btnReset")}}</el-button>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{$t("btnSearch")}}</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{$t("btnReset")}}</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -86,7 +82,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['${moduleName}:${businessName}:add']"
-        >{{this.$i18n.t("btnAdd")}}</el-button>
+        >{{$t("btnAdd")}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -97,7 +93,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['${moduleName}:${businessName}:edit']"
-        >{{this.$i18n.t("btnEdit")}}</el-button>
+        >{{$t("btnEdit")}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -108,7 +104,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['${moduleName}:${businessName}:remove']"
-        >{{this.$i18n.t("btnRemove")}}</el-button>
+        >{{$t("btnRemove")}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -118,7 +114,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['${moduleName}:${businessName}:export']"
-        >{{this.$i18n.t("btnExport")}}</el-button>
+        >{{$t("btnExport")}}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -134,8 +130,7 @@
 #else
 #set($comment=$column.columnComment)
 #end
-#set($label=$lang.replace("keyWork","lbl.${businessName}.${column.javaField}"))
-#set($operate=$lang.replace("keyWork","operate"))
+#set($label="$t('lbl.${businessName}.${column.javaField}')")
 #if($column.pk)
       <el-table-column :label="$label" align="center" prop="${javaField}" />
 #elseif($column.list && $column.htmlType == "datetime")
@@ -164,7 +159,7 @@
       <el-table-column :label="$label" align="center" prop="${javaField}" />
 #end
 #end
-      <el-table-column :label="$operate" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('operate')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -172,14 +167,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['${moduleName}:${businessName}:edit']"
-          >{{$i18n.t("btnEdit")}}</el-button>
+          >{{$t("btnEdit")}}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['${moduleName}:${businessName}:remove']"
-          >{{$i18n.t("btnRemove")}}</el-button>
+          >{{$t("btnRemove")}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -207,9 +202,8 @@
 #set($comment=$column.columnComment)
 #end
 #set($dictType=$column.dictType)
-#set($label=$lang.replace("keyWork","lbl.${businessName}.${column.javaField}"))
-#set($placeholder=$lang.replace("keyWork","plh.${businessName}.${column.javaField}"))
-#set($dictGeneration=$lang.replace("keyWork","dictGeneration"))
+#set($label="$t('lbl.${businessName}.${column.javaField}')")
+#set($placeholder="$t('plh.${businessName}.${column.javaField}')")
 #if($column.htmlType == "input")
         <el-form-item :label="$label" prop="${field}">
           <el-input v-model="form.${field}" :placeholder="$placeholder" />
@@ -244,7 +238,7 @@
 #elseif($column.htmlType == "select" && $dictType)
         <el-form-item :label="$label" prop="${field}">
           <el-select v-model="form.${field}" :placeholder="$placeholder">
-            <el-option :label="$dictGeneration" value="" />
+            <el-option :label="$t('dictGeneration')" value="" />
           </el-select>
         </el-form-item>
 #elseif($column.htmlType == "checkbox" && "" != $dictType)
@@ -261,7 +255,7 @@
 #elseif($column.htmlType == "checkbox" && $dictType)
         <el-form-item :label="$label" prop="${field}">
           <el-checkbox-group v-model="form.${field}">
-            <el-checkbox>{{this.$i18n.t("dictGeneration")}}</el-checkbox>
+            <el-checkbox>{{$t("dictGeneration")}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
 #elseif($column.htmlType == "radio" && "" != $dictType)
@@ -281,7 +275,7 @@
 #elseif($column.htmlType == "radio" && $dictType)
         <el-form-item :label="$label" prop="${field}">
           <el-radio-group v-model="form.${field}">
-            <el-radio label="1">{{this.$i18n.t("dictGeneration")}}</el-radio>
+            <el-radio label="1">{{$t("dictGeneration")}}</el-radio>
           </el-radio-group>
         </el-form-item>
 #elseif($column.htmlType == "datetime")
@@ -301,15 +295,14 @@
 #end
 #end
 #end
-#set($label=$lang.replace("keyWork","serialNumber"))
 #if($table.sub)
-        <el-divider content-position="center">${subTable.functionName}{{this.$i18n.t("info")}}</el-divider>
+        <el-divider content-position="center">${subTable.functionName}{{$t("info")}}</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd${subClassName}">{{this.$i18n.t("btnAdd")}}</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd${subClassName}">{{$t("btnAdd")}}</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete${subClassName}">{{this.$i18n.t("btnDelete")}}</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete${subClassName}">{{$t("btnDelete")}}</el-button>
           </el-col>
         </el-row>
         <el-table :data="${subclassName}List" :row-class-name="row${subClassName}Index" @selection-change="handle${subClassName}SelectionChange" ref="${subclassName}">
@@ -326,22 +319,21 @@
 #end
 #set($label=$lang.replace("keyWork","lbl.${businessName}.${column.javaField}"))
 #set($placeholder=$lang.replace("keyWork","plh.${businessName}.${column.javaField}"))
-#set($dictGeneration=$lang.replace("keyWork","dictGeneration"))
 #if($column.pk || $javaField == ${subTableFkclassName})
 #elseif($column.list && $column.htmlType == "input")
-          <el-table-column :label="$label" prop="${javaField}" width="150">
+          <el-table-column :label="$label" prop="${javaField}" align="center">
             <template slot-scope="scope">
               <el-input v-model="scope.row.$javaField" :placeholder="$placeholder" />
             </template>
           </el-table-column>
 #elseif($column.list && $column.htmlType == "datetime")
-          <el-table-column :label="$label" prop="${javaField}" width="240">
+          <el-table-column :label="$label" prop="${javaField}" align="center">
             <template slot-scope="scope">
               <el-date-picker clearable v-model="scope.row.$javaField" type="date" value-format="yyyy-MM-dd" :placeholder="$placeholder" />
             </template>
           </el-table-column>
 #elseif($column.list && ($column.htmlType == "select" || $column.htmlType == "radio") && "" != $column.dictType)
-          <el-table-column :label="$label" prop="${javaField}" width="150">
+          <el-table-column :label="$label" prop="${javaField}" align="center">
             <template slot-scope="scope">
               <el-select v-model="scope.row.$javaField" :placeholder="$placeholder">
                 <el-option
@@ -354,10 +346,10 @@
             </template>
           </el-table-column>
 #elseif($column.list && ($column.htmlType == "select" || $column.htmlType == "radio") && "" == $column.dictType)
-          <el-table-column :label="$label" prop="${javaField}" width="150">
+          <el-table-column :label="$label" prop="${javaField}" align="center">
             <template slot-scope="scope">
               <el-select v-model="scope.row.$javaField" :placeholder="$placeholder">
-                <el-option :label="$dictGeneration" value="" />
+                <el-option :label="$t('dictGeneration')" value="" />
               </el-select>
             </template>
           </el-table-column>
@@ -367,8 +359,8 @@
 #end
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">{{this.$i18n.t("formSubmit")}}</el-button>
-        <el-button @click="cancel">{{this.$i18n.t("formCancel")}}</el-button>
+        <el-button type="primary" @click="submitForm">{{$t("btnSubmit")}}</el-button>
+        <el-button @click="cancel">{{$t("btnCancel")}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -439,9 +431,8 @@ export default {
 #else
 #set($comment=$column.columnComment)
 #end
-#set($required=$lang.replace("keyWork","req.${businessName}.${column.javaField}"))
         $column.javaField: [
-          { required: true, message: $required, trigger: #if($column.htmlType == "select" || $column.htmlType == "radio")"change"#else"blur"#end }
+          { required: true, message: this.$t("req.${businessName}.${column.javaField}"), trigger: #if($column.htmlType == "select" || $column.htmlType == "radio")"change"#else"blur"#end }
         ]#if($foreach.count != $columns.size()),#end
 #end
 #end
@@ -520,11 +511,10 @@ export default {
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-#set($titleAddForm=$lang.replace("keyWork","titleAddForm"))
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = $titleAddForm;
+      this.title = this.$t("titleAddForm");
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -540,9 +530,8 @@ export default {
 #if($table.sub)
         this.${subclassName}List = response.data.${subclassName}List;
 #end
-#set($titleEditForm=$lang.replace("keyWork","titleEditForm"))
         this.open = true;
-        this.title = $titleEditForm;
+        this.title = this.$t("titleEditForm");
       });
     },
     /** 提交按钮 */
@@ -557,17 +546,15 @@ export default {
 #if($table.sub)
           this.form.${subclassName}List = this.${subclassName}List;
 #end
-#set($editSuccessfully=$lang.replace("keyWork","editSuccessfully"))
-#set($addSuccessfully=$lang.replace("keyWork","addSuccessfully"))
           if (this.form.${pkColumn.javaField} != null) {
             update${BusinessName}(this.form).then(response => {
-              this.#[[$modal]]#.msgSuccess($editSuccessfully);
+              this.#[[$modal]]#.msgSuccess(this.$t("editSuccessfully"));
               this.open = false;
               this.getList();
             });
           } else {
             add${BusinessName}(this.form).then(response => {
-              this.#[[$modal]]#.msgSuccess($addSuccessfully);
+              this.#[[$modal]]#.msgSuccess(this.$t("addSuccessfully"));
               this.open = false;
               this.getList();
             });
@@ -576,15 +563,13 @@ export default {
       });
     },
     /** 删除按钮操作 */
-#set($confirmDetele=$lang.replace("keyWork","confirmDetele"))
-#set($deletedSuccessfully=$lang.replace("keyWork","deletedSuccessfully"))
     handleDelete(row) {
       const ${pkColumn.javaField}s = row.${pkColumn.javaField} || this.ids;
-      this.#[[$modal]]#.confirm($confirmDetele + ': ' + ${pkColumn.javaField}s + ' ？').then(function() {
+      this.#[[$modal]]#.confirm(this.$t("confirmDetele") + ': ' + ${pkColumn.javaField}s + ' ？').then(function() {
         return del${BusinessName}(${pkColumn.javaField}s);
       }).then(() => {
         this.getList();
-        this.#[[$modal]]#.msgSuccess($deletedSuccessfully);
+        this.#[[$modal]]#.msgSuccess(this.$t("deletedSuccessfully"));
       }).catch(() => {});
     },
 #if($table.sub)
