@@ -1,17 +1,27 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{'--current-color': theme}">
+    <el-container>
+      <el-aside v-if="!sidebar.hide" class="sidebar-container" :style="{ width: sidebarWidth + 'px' }">
+        <div class="resize-handle" @mousedown="handleMouseDown"></div>
+        <sidebar />
+      </el-aside>
+      
+      <el-container class="main-container" :class="{hasTagsView:needTagsView, sidebarHide:sidebar.hide}">
+        <el-header height="auto" :class="{'fixed-header':fixedHeader}">
+          <navbar />
+          <tags-view v-if="needTagsView" />
+        </el-header>
+        
+        <el-main>
+          <app-main />
+        </el-main>
+      </el-container>
+    </el-container>
+
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar v-if="!sidebar.hide" class="sidebar-container"/>
-    <div :class="{hasTagsView:needTagsView,sidebarHide:sidebar.hide}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar/>
-        <tags-view v-if="needTagsView"/>
-      </div>
-      <app-main/>
-      <right-panel>
-        <settings/>
-      </right-panel>
-    </div>
+    <right-panel>
+      <settings />
+    </right-panel>
   </div>
 </template>
 
@@ -54,9 +64,34 @@ export default {
       return variables;
     }
   },
+  data() {
+    return {
+      sidebarWidth: 200,
+      isDragging: false,
+      startX: 0,
+      startWidth: 0
+    }
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    },
+    handleMouseDown(e) {
+      this.isDragging = true
+      this.startX = e.clientX
+      this.startWidth = this.sidebarWidth
+      document.addEventListener('mousemove', this.handleMouseMove)
+      document.addEventListener('mouseup', this.handleMouseUp)
+    },
+    handleMouseMove(e) {
+      if (!this.isDragging) return
+      const deltaX = e.clientX - this.startX
+      this.sidebarWidth = Math.max(200, Math.min(600, this.startWidth + deltaX))
+    },
+    handleMouseUp() {
+      this.isDragging = false
+      document.removeEventListener('mousemove', this.handleMouseMove)
+      document.removeEventListener('mouseup', this.handleMouseUp)
     }
   }
 }
@@ -71,6 +106,36 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+
+    .el-container {
+      height: 100%;
+    }
+
+    .el-aside {
+      position: relative;
+      overflow: hidden;
+
+      .resize-handle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: transparent;
+        cursor: col-resize;
+        z-index: 10;
+
+        &:hover {
+          background-color: var(--current-color);
+          opacity: 0.4;
+        }
+      }
+    }
+
+    .el-main {
+      padding: 10px;
+      overflow: auto;
+    }
 
     &.mobile.openSidebar {
       position: fixed;
@@ -107,5 +172,14 @@ export default {
 
   .mobile .fixed-header {
     width: 100%;
+  }
+
+  .el-aside {
+    line-height: 0;
+    padding: 0;
+  }
+
+  .el-header {
+    padding: 0;
   }
 </style>

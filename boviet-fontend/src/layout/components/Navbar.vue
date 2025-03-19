@@ -27,7 +27,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar">
+          <img :src="avatar" @error="handleAvatarError" class="user-avatar">
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
@@ -69,6 +69,11 @@ export default {
     RuoYiDoc,
     LanguageSelect
   },
+  data() {
+    return {
+      defaultAvatar: require('@/assets/images/profile.png')
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -95,6 +100,9 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    handleAvatarError(e) {
+      e.target.src = this.defaultAvatar
     },
     async logout() {
       this.$confirm('确定注销并退出系统吗？', '提示', {
