@@ -1,7 +1,7 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{'--current-color': theme}">
     <el-container>
-      <el-aside v-if="!sidebar.hide" class="sidebar-container" :style="{ width: sidebarWidth + 'px' }">
+      <el-aside v-if="!sidebar.hide" class="sidebar-container" :style="{backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground, width: sidebarWidth + 'px' }">
         <div class="resize-handle" @mousedown="handleMouseDown"></div>
         <sidebar />
       </el-aside>
@@ -124,6 +124,7 @@ export default {
         background-color: transparent;
         cursor: col-resize;
         z-index: 10;
+        user-select: none; // Prevent text selection during resize
 
         &:hover {
           background-color: var(--current-color);
