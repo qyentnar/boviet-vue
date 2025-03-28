@@ -182,6 +182,7 @@
         pointer-events: none;
         transition-duration: 0.3s;
         transform: translate3d(-$base-sidebar-width, 0, 0);
+        width: 0px !important;
       }
     }
   }

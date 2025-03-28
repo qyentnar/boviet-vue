@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      sidebarWidth: 200,
+      sidebarWidth: 250,
       isDragging: false,
       startX: 0,
       startWidth: 0
